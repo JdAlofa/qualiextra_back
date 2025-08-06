@@ -78,6 +78,14 @@ This project is a REST API for user management, built with Node.js, Express, Typ
     npm run start
     ```
 
+## Viewing the Database
+
+You can use Prisma Studio to view and manage your database records through a browser-based GUI.
+
+```bash
+npx prisma studio
+```
+
 ## API Endpoints
 
 The API documentation is available at `/docs` when the server is running.
