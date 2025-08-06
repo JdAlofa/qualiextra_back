@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"tsoa routes --watch\" \"tsoa spec --watch\" \"tsx watch src/server.ts\"",
+    "dev": "nodemon --watch src --ext ts --ignore src/generated --exec \"npm run build && node dist/server.js\"",
     "build": "tsoa routes && tsoa spec && tsc",
     "start": "node dist/server.js"
   },
@@ -16,17 +16,22 @@
     "@tsoa/runtime": "^6.6.0",
     "@types/express": "^5.0.3",
     "bcryptjs": "^3.0.2",
+    "class-validator": "^0.14.2",
+    "disposable-email-domains": "^1.0.62",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "prisma": "^6.13.0",
     "swagger-ui-express": "^5.0.1",
     "tsx": "^4.20.3"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.19.9",
     "@types/swagger-ui-express": "^4.1.8",
     "concurrently": "^9.2.0",
     "eslint": "^8",
+    "nodemon": "^3.1.10",
     "tsoa": "^6.6.0",
     "typescript": "^5.9.2"
   }

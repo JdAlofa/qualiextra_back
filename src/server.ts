@@ -14,5 +14,7 @@ RegisterRoutes(app);
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}
+Go to http://localhost:${PORT} 
+Swagger docs available at http://localhost:${PORT}/docs`);
 });
