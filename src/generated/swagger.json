@@ -154,7 +154,13 @@
 				"additionalProperties": false
 			}
 		},
-		"securitySchemes": {}
+		"securitySchemes": {
+			"jwt": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
 	},
 	"info": {
 		"title": "qualiextra_back",
@@ -183,7 +189,13 @@
 				"tags": [
 					"Users"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": [
+							"Admin"
+						]
+					}
+				],
 				"parameters": []
 			}
 		},
@@ -201,6 +213,9 @@
 							}
 						}
 					},
+					"403": {
+						"description": "Forbidden"
+					},
 					"404": {
 						"description": "Not Found"
 					}
@@ -208,7 +223,11 @@
 				"tags": [
 					"Users"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -233,6 +252,9 @@
 							}
 						}
 					},
+					"403": {
+						"description": "Forbidden"
+					},
 					"404": {
 						"description": "Not Found"
 					}
@@ -240,7 +262,11 @@
 				"tags": [
 					"Users"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -275,7 +301,13 @@
 				"tags": [
 					"Users"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": [
+							"Admin"
+						]
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -286,6 +318,43 @@
 						}
 					}
 				]
+			}
+		},
+		"/private": {
+			"get": {
+				"operationId": "GetPrivateMessage",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"Private"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
 			}
 		},
 		"/auth/register": {

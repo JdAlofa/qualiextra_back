@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Qualiextra-Back
 
-## Getting Started
+This project is a REST API for user management, built with Node.js, Express, TypeScript, TSOA, and Prisma. It includes features like role-based access control, email verification, and protection against temporary email addresses.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **User Management:** CRUD operations for users.
+- **Authentication:** JWT-based authentication.
+- **Role-based Access Control (RBAC):**
+    - **Admin:** Can manage all users.
+    - **User:** Can only manage their own profile.
+- **Email Verification:** New users receive a verification email to activate their accounts.
+- **Temporary Email Blocking:** Prevents registration with disposable email addresses.
+- **API Documentation:** Automatically generated Swagger documentation.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Prerequisites
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [Node.js](https://nodejs.org/) (v20.x or later)
+- [Bun](https://bun.sh/) (v1.x or later)
+- A PostgreSQL database
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Installation and Setup
 
-## Learn More
+1.  **Clone the repository:**
 
-To learn more about Next.js, take a look at the following resources:
+    ```bash
+    git clone https://github.com/your-username/qualiextra-back.git
+    cd qualiextra-back
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2.  **Install dependencies:**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+    ```bash
+    npm install
+    ```
 
-## Deploy on Vercel
+3.  **Set up environment variables:**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    Create a `.env` file in the root of the project and add the following variables:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+    ```env
+    DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
+    JWT_SECRET="your-jwt-secret"
+    EMAIL_HOST="your-email-host"
+    EMAIL_PORT="your-email-port"
+    EMAIL_USER="your-email-user"
+    EMAIL_PASS="your-email-password"
+    ```
+
+4.  **Apply database migrations:**
+
+    ```bash
+    npm run prisma migrate dev
+    ```
+
+5.  **Seed the database (optional):**
+
+    This will create an admin user.
+
+    ```bash
+    npx prisma db seed
+    ```
+
+## Running the Application
+
+-   **Development mode:**
+
+    ```bash
+    npm run dev
+    ```
+
+    The server will start on `http://localhost:3000` and will automatically restart on file changes.
+
+-   **Production mode:**
+
+    ```bash
+    npm run build
+    npm run start
+    ```
+
+## API Endpoints
+
+The API documentation is available at `/docs` when the server is running.
+
+### Authentication
+
+-   `POST /login`: Authenticate a user and get a JWT token.
+
+### Users
+
+-   `GET /users`: Get a list of all users (Admin only).
+-   `GET /users/{userId}`: Get a user by ID (Admin only).
+-   `POST /users`: Create a new user.
+-   `PUT /users/{userId}`: Update a user (Admin only).
+-   `DELETE /users/{userId}`: Delete a user (Admin only).
+
+### Private
+
+-   `GET /private`: A protected route that returns a greeting to the authenticated user.
+
+## Security Features
+
+-   **Password Hashing:** Passwords are hashed using `bcryptjs`.
+-   **JWT Authentication:** Secure endpoints using JSON Web Tokens.
+-   **Email Verification:** Prevents users from logging in until their email is verified.
+-   **Disposable Email Detection:** Blocks registration from known temporary email providers.
+

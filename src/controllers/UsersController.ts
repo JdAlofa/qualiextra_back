@@ -8,15 +8,20 @@ import {
   Body,
   Response,
   Tags,
+  Security,
+  Request,
 } from "tsoa";
 import prisma from "../lib/prisma";
 import bcrypt from "bcryptjs";
 import UserUpdateRequestBody from "../lib/requests_bodies/UserUpdateRequestBody";
 import UserResponse from "../lib/requests_bodies/UserResponse";
+import { AuthenticatedRequest } from "../lib/auth";
 
 @Route("users")
 @Tags("Users")
+@Security("jwt")
 export class UsersController extends Controller {
+  @Security("jwt", ["Admin"])
   @Get()
   @Response(200, "Success")
   public async getUsers(): Promise<UserResponse[]> {
@@ -27,7 +32,19 @@ export class UsersController extends Controller {
   @Get("{userId}")
   @Response(200, "Success")
   @Response(404, "Not Found")
-  public async getUser(@Path() userId: string): Promise<UserResponse> {
+  @Response(403, "Forbidden")
+  public async getUser(
+    @Path() userId: string,
+    @Request() req: AuthenticatedRequest
+  ): Promise<UserResponse> {
+    if (
+      !req.user ||
+      (req.user.role.toUpperCase() !== "ADMIN" && req.user.id !== userId)
+    ) {
+      this.setStatus(403);
+      throw new Error("Forbidden");
+    }
+
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
@@ -42,10 +59,20 @@ export class UsersController extends Controller {
   @Put("{userId}")
   @Response(200, "Success")
   @Response(404, "Not Found")
+  @Response(403, "Forbidden")
   public async updateUser(
     @Path() userId: string,
-    @Body() body: UserUpdateRequestBody
+    @Body() body: UserUpdateRequestBody,
+    @Request() req: AuthenticatedRequest
   ): Promise<UserResponse> {
+    if (
+      !req.user ||
+      (req.user.role.toUpperCase() !== "ADMIN" && req.user.id !== userId)
+    ) {
+      this.setStatus(403);
+      throw new Error("Forbidden");
+    }
+
     const { firstName, lastName, password } = body;
 
     let hashedPassword;
@@ -57,8 +84,8 @@ export class UsersController extends Controller {
       const updatedUser = await prisma.user.update({
         where: { id: userId },
         data: {
-        // Conditionally include fields in the update data only if they were provided.
-        // This prevents accidentally overwriting existing fields with null or undefined.
+          // Conditionally include fields in the update data only if they were provided.
+          // This prevents accidentally overwriting existing fields with null or undefined.
           ...(firstName && { firstName }),
           ...(lastName && { lastName }),
           ...(hashedPassword && { password: hashedPassword }),
@@ -73,8 +100,9 @@ export class UsersController extends Controller {
     }
   }
 
+  @Security("jwt", ["Admin"])
   @Delete("{userId}")
-  @Response(204, "No Content, the user has been deleted")
+  @Response(204, "No Content")
   @Response(404, "Not Found")
   public async deleteUser(@Path() userId: string): Promise<void> {
     try {

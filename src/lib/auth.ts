@@ -1,33 +1,49 @@
-import { Request, Response, NextFunction } from "express";
+import { Request } from "express";
 import jwt from "jsonwebtoken";
 
 const JWT_SECRET =
-  process.env.JWT_SECRET || "fallback-secret-key-that-should-be-really-hard-to-guess";
+  process.env.JWT_SECRET ||
+  "fallback-secret-key-that-should-be-really-hard-to-guess";
 
 export interface AuthenticatedRequest extends Request {
-  user?: { id: string; role: string };
+  user?: { id:string; role: string; iat: number; exp: number };
 }
 
-export const expressAuthentication = async (
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  const token = req.headers.authorization?.split(" ")[1];
+export function expressAuthentication(
+  request: AuthenticatedRequest,
+  securityName: string,
+  scopes?: string[]
+): Promise<any> {
+  if (securityName === "jwt") {
+    const token = request.headers.authorization?.split(" ")[1];
 
-  if (!token) {
-    res.status(401).json({ message: "Unauthorized: No token provided" });
-    return;
+    return new Promise((resolve, reject) => {
+      if (!token) {
+        return reject(new Error("No token provided"));
+      }
+      jwt.verify(
+        token,
+        JWT_SECRET,
+        (err: any, decoded: any) => {
+          if (err) {
+            reject(err);
+          } else {
+            // Check if the user has the required scopes
+            if (scopes) {
+              const userRoles = [decoded.role.toUpperCase()];
+              const hasAllScopes = scopes.every((scope) =>
+                userRoles.includes(scope.toUpperCase())
+              );
+              if (!hasAllScopes) {
+                reject(new Error("JWT does not contain required scope."));
+              }
+            }
+            resolve(decoded);
+          }
+        }
+      );
+    });
   }
-
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as {
-      id: string;
-      role: string;
-    };
-    req.user = decoded;
-    next();
-  } catch (error) {
-    res.status(401).json({ message: "Unauthorized: Invalid token" });
-  }
-};
+  // Fallback for other security types if any
+  return Promise.reject(new Error("No security defined for this route"));
+}
