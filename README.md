@@ -16,7 +16,6 @@ This project is a REST API for user management, built with Node.js, Express, Typ
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/) (v20.x or later)
-- [Bun](https://bun.sh/) (v1.x or later)
 - A PostgreSQL database
 
 ## Installation and Setup
@@ -41,10 +40,6 @@ This project is a REST API for user management, built with Node.js, Express, Typ
     ```env
     DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
     JWT_SECRET="your-jwt-secret"
-    EMAIL_HOST="your-email-host"
-    EMAIL_PORT="your-email-port"
-    EMAIL_USER="your-email-user"
-    EMAIL_PASS="your-email-password"
     ```
 
 4.  **Apply database migrations:**
@@ -60,6 +55,10 @@ This project is a REST API for user management, built with Node.js, Express, Typ
     ```bash
     npx prisma db seed
     ```
+
+    > **Note:**  
+    > You can view the credentials of the seeded admin user for testing purposes by checking the `prisma/seed.ts` file.  
+    > The default admin email is `admin@example.com` and the password is `password-admin`
 
 ## Running the Application
 
@@ -77,6 +76,12 @@ This project is a REST API for user management, built with Node.js, Express, Typ
     npm run build
     npm run start
     ```
+
+## Live Demo
+
+The API is deployed on Vercel. You can view the live API documentation here:
+
+[https://qualiextra-back.vercel.app/docs](https://qualiextra-back.vercel.app/docs)
 
 ## Viewing the Database
 

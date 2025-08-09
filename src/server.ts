@@ -13,7 +13,11 @@ RegisterRoutes(app);
 
 const PORT = process.env.PORT || 3000;
 
+/* Vercel handles the server listening
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}
 Swagger docs available at http://localhost:${PORT}/docs`);
 });
+*/
+
+export default app;

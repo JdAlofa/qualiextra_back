@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon --watch src --ext ts --ignore src/generated --exec \"npm run build && node dist/server.js\"",
+    "dev": "nodemon --watch src --ext ts --ignore src/generated --exec \"npm run build && node dist/index.js\"",
     "build": "tsoa routes && tsoa spec && tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/index.js"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
