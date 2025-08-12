@@ -7,6 +7,11 @@ const app: Application = express();
 
 app.use(express.json());
 
+// Add a root route that redirects to /docs
+app.get("/", (req, res) => {
+  res.redirect("/docs");
+});
+
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerJson));
 
 RegisterRoutes(app);
