@@ -1,7 +1,6 @@
 import express, { Application } from "express";
 import swaggerUi from "swagger-ui-express";
 import { RegisterRoutes } from "./generated/routes";
-import * as swaggerJson from "./generated/swagger.json";
 
 const app: Application = express();
 
@@ -12,7 +11,16 @@ app.get("/", (req, res) => {
   res.redirect("/docs");
 });
 
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerJson));
+// Import swagger.json dynamically to ensure it exists
+let swaggerDocument;
+try {
+  swaggerDocument = require("./generated/swagger.json");
+} catch (error) {
+  console.error("Swagger JSON not found:", error);
+  swaggerDocument = { info: { title: "API", version: "1.0.0" }, paths: {} };
+}
+
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 RegisterRoutes(app);
 
