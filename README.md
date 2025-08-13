@@ -7,8 +7,8 @@ This project is a REST API for user management, built with Node.js, Express, Typ
 - **User Management:** CRUD operations for users.
 - **Authentication:** JWT-based authentication.
 - **Role-based Access Control (RBAC):**
-    - **Admin:** Can manage all users.
-    - **User:** Can only manage their own profile.
+  - **Admin:** Can manage all users.
+  - **User:** Can only manage their own profile.
 - **Email Verification:** New users receive a verification email to activate their accounts.
 - **Temporary Email Blocking:** Prevents registration with disposable email addresses.
 - **API Documentation:** Automatically generated Swagger documentation.
@@ -62,26 +62,20 @@ This project is a REST API for user management, built with Node.js, Express, Typ
 
 ## Running the Application
 
--   **Development mode:**
+- **Development mode:**
 
-    ```bash
-    npm run dev
-    ```
+  ```bash
+  npm run dev
+  ```
 
-    The server will start on `http://localhost:3000` and will automatically restart on file changes.
+  The server will start on `http://localhost:3000` and will automatically restart on file changes.
 
--   **Production mode:**
+- **Production mode:**
 
-    ```bash
-    npm run build
-    npm run start
-    ```
-
-## Live Demo
-
-The API is deployed on Vercel. You can view the live API documentation here:
-
-[https://qualiextra-back.vercel.app/docs](https://qualiextra-back.vercel.app/docs)
+  ```bash
+  npm run build
+  npm run start
+  ```
 
 ## Viewing the Database
 
@@ -97,24 +91,23 @@ The API documentation is available at `/docs` when the server is running.
 
 ### Authentication
 
--   `POST /login`: Authenticate a user and get a JWT token.
+- `POST /login`: Authenticate a user and get a JWT token.
 
 ### Users
 
--   `GET /users`: Get a list of all users (Admin only).
--   `GET /users/{userId}`: Get a user by ID (Admin only).
--   `POST /users`: Create a new user.
--   `PUT /users/{userId}`: Update a user (Admin only).
--   `DELETE /users/{userId}`: Delete a user (Admin only).
+- `GET /users`: Get a list of all users (Admin only).
+- `GET /users/{userId}`: Get a user by ID (Admin only).
+- `POST /users`: Create a new user.
+- `PUT /users/{userId}`: Update a user (Admin only).
+- `DELETE /users/{userId}`: Delete a user (Admin only).
 
 ### Private
 
--   `GET /private`: A protected route that returns a greeting to the authenticated user.
+- `GET /private`: A protected route that returns a greeting to the authenticated user.
 
 ## Security Features
 
--   **Password Hashing:** Passwords are hashed using `bcryptjs`.
--   **JWT Authentication:** Secure endpoints using JSON Web Tokens.
--   **Email Verification:** Prevents users from logging in until their email is verified.
--   **Disposable Email Detection:** Blocks registration from known temporary email providers.
-
+- **Password Hashing:** Passwords are hashed using `bcryptjs`.
+- **JWT Authentication:** Secure endpoints using JSON Web Tokens.
+- **Email Verification:** Prevents users from logging in until their email is verified.
+- **Disposable Email Detection:** Blocks registration from known temporary email providers.
